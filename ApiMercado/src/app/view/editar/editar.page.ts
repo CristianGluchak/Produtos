@@ -51,7 +51,7 @@ export class EditarPage implements OnInit {
       novo.descricao = this.descricao;
       novo.categoria = this.categoria;
       novo.fornecedor= this.fornecedor
-      this.produtosService.cadastrar(novo);
+      this.produtosService.atualizar(this.indice,novo);
       this.router.navigate(["/home"]);
     }else{
       this.presentAlert("Erro", "Nome e Preço são campos Obrigatórios!");
