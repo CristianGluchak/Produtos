@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  firebaseConfig : {
+  firebaseConfig: {
     apiKey: "AIzaSyD76-FHANJrk68AhHuHDb8bMjMrb1O33Wk",
     authDomain: "mercadoonline-a3a80.firebaseapp.com",
     databaseURL: "https://mercadoonline-a3a80-default-rtdb.firebaseio.com",

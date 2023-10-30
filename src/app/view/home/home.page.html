@@ -10,6 +10,7 @@
 
   <ion-list *ngFor="let produto of this.componentesDoProduto">
   <ion-item (click)="editar(produto)">
+      <ion-avatar><img src="{{produto.downloadURL}}" /></ion-avatar>
      <ion-label>{{produto.nome}}</ion-label>
   </ion-item>
   </ion-list>

@@ -1,5 +1,7 @@
 {
   "name": "ApiMercado",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

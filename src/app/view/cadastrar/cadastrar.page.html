@@ -35,9 +35,13 @@
         <ion-select-option value="8">Gabinetes</ion-select-option>
         <ion-select-option value="9">Mesas Gamer</ion-select-option>
         <ion-select-option value="10">Coolers</ion-select-option>
-
-
       </ion-select>
+    </ion-item>
+    
+    <ion-item>
+      <ion-button size="default" color="success" shape="round"  >
+        <input type="file"  (change)="uploadFile($event.target)" />
+      </ion-button>
     </ion-item>
 
     <ion-button expand="full" (click)="cadastrar()">Cadastrar</ion-button>

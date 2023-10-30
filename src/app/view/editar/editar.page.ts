@@ -18,6 +18,7 @@ export class EditarPage implements OnInit {
   fornecedor !: string;
   produto! : Produto;
   edicao : boolean =true;
+  imagem! : any;
 
 
   constructor(
@@ -32,6 +33,7 @@ export class EditarPage implements OnInit {
     this.descricao = this.produto.descricao;
     this.categoria = this.produto.categoria;
     this.fornecedor = this.produto.fornecedor;
+
   }
   habilitar(){
     if (this.edicao){
@@ -40,27 +42,34 @@ export class EditarPage implements OnInit {
       this.edicao = true;
     }
   }
+  uploadFile(imagem: any){
+    this.imagem = imagem.files;
+  }
+
   editar(){
     if(this.nome && this.preco  ){
       let novo : Produto = new Produto(this.nome, this.preco);
       novo.descricao = this.descricao;
       novo.categoria = this.categoria;
-      novo.fornecedor= this.fornecedor
-<<<<<<< HEAD
-      this.firebase.editar(novo,this.produto.id)
-      .then(()=>{this.router.navigate(["/home"]);})
-      .catch((error)=>{
-        console.log(error);
-        this.presentAlert("Erro", "Erro ao Atualizar Produto!");
-      })
-=======
-      this.produtosService.atualizar(this.indice,novo);
-      this.router.navigate(["/home"]);
->>>>>>> 536bb92bfc940ad953b557a2d1fcb15eb4a87892
+      novo.fornecedor= this.fornecedor;
+      novo.id = this.produto.id;
+      if(this.imagem){
+        this.firebase.uploadImage(this.imagem, novo)
+        ?.then(()=>{this.router.navigate(["/home"])})
+      }else{
+        novo.downloadURL = this.produto.downloadURL;
+        this.firebase.editar(novo, this.produto.id)
+        .then(()=>{this.router.navigate(["/home"]);})
+        .catch((error)=>{
+          console.log(error);
+          this.presentAlert("Erro", "Erro ao Atualizar Produto!");
+        })
+      }
     }else{
       this.presentAlert("Erro", "Nome e Preço são campos Obrigatórios!");
     }
   }
+  
   excluir(){
     this.presentConfirmAlert("ATENÇÃO","Deseja realmente excluir o Produto?");
 
@@ -72,8 +81,10 @@ export class EditarPage implements OnInit {
       console.log(error);
       this.presentAlert("Erro", "Erro ao Excluir Produto!");
     })
-    this.router.navigate(["/home"]);
   }
+
+
+
   async presentAlert(subHeader: string, message: string) {
     const alert = await this.alertController.create({
       header: 'Mercado Online',

@@ -15,29 +15,40 @@ export class CadastrarPage implements OnInit {
   public descricao! : string;
   public categoria! : number;
   public fornecedor !: string;
+  public imagem : any;
 
   constructor(private alertController: AlertController,
     private router : Router, private firebase : FirebaseService) { }
 
   ngOnInit() {
   }
-
+  uploadFile(imagem: any) {
+    this.imagem = imagem.files
+  }
   cadastrar(){
     if(this.nome && this.preco ){
       let novo : Produto = new Produto(this.nome, this.preco);
       novo.descricao = this.descricao;
       novo.categoria = this.categoria;
       novo.fornecedor = this.fornecedor;
+      if(this.imagem){
+        this.firebase.uploadImage(this.imagem, novo)
+        ?.then(()=> {
+          this.router.navigate(["/home"]);
+        })
+      }else{
       this.firebase.cadastrar(novo)
-      .then(() =>  this.router.navigate(["/home"]))
+      .then(() => this.router.navigate(["/home"]))
       .catch((error) => {
         console.log(error);
-        this.presentAlert("Erro", "Erro ao salvar produto!");
-      })
+        this.presentAlert("Erro", "Erro ao salvar contato!");
+        })
+      }
     }else{
       this.presentAlert("Erro", "Nome e Preço são campos Obrigatórios!");
     }
   }
+
 
 
   async presentAlert(subHeader: string, message: string) {

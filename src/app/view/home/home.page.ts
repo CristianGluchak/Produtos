@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { ProdutosService } from '../../model/service/produtos.service';
 import { Produto } from '../../model/entities/Produto';
 import { FirebaseService } from 'src/app/model/service/firebase.service';
 
