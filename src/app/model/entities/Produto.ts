@@ -6,8 +6,8 @@ export class Produto {
   private _fornecedor!: string;
   private _categoria!: number;
   private _downloadURL: any;
-
-
+  private _uid!: string; 
+  
   constructor(nome: string, preco: string) {
     this._nome = nome;
     this._preco = preco;
@@ -18,7 +18,6 @@ export class Produto {
   public set id(value: string) {
     this._id = value;
   }
-
 
   public get nome(): string {
     return this._nome;
@@ -43,14 +42,12 @@ export class Produto {
     this._descricao = value;
   }
 
-
   public get fornecedor(): string {
     return this._fornecedor;
   }
   public set fornecedor(value: string) {
     this._fornecedor = value;
   }
-
 
   public get categoria(): number {
     return this._categoria;
@@ -65,5 +62,10 @@ export class Produto {
     this._downloadURL = value;
   }
 
-
+  public get uid(): string {
+    return this._uid;
+  }
+  public set uid(value: string) {
+    this._uid = value;
+  }
 }

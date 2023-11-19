@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { GoBackPage } from 'src/app/common/goBackPage';
 import { Produto } from 'src/app/model/entities/Produto';
+import { AuthService } from 'src/app/model/service/auth.service';
 import { FirebaseService } from 'src/app/model/service/firebase.service';
 
 @Component({
@@ -10,49 +13,44 @@ import { FirebaseService } from 'src/app/model/service/firebase.service';
   styleUrls: ['./editar.page.scss'],
 })
 export class EditarPage implements OnInit {
-  indice! : number;
-  nome! : string;
-  preco! : string;
-  descricao! : string;
-  categoria! : number;
-  fornecedor !: string;
+  detailsForm!: FormGroup;
   produto! : Produto;
-  edicao : boolean =true;
   imagem! : any;
+  user :any;
 
 
   constructor(
     private firebase : FirebaseService,
     private router : Router,
-    private alertController: AlertController) { }
+    private alertController: AlertController,
+    private auth : AuthService,
+    private goBack: GoBackPage,
+    private formBuilder: FormBuilder) {
+      this.user = this.auth.getUsuarioLogado();
+     }
 
   ngOnInit() {
     this.produto = history.state.produto;
-    this.nome = this.produto.nome;
-    this.preco = this.produto.preco;
-    this.descricao = this.produto.descricao;
-    this.categoria = this.produto.categoria;
-    this.fornecedor = this.produto.fornecedor;
+    this.detailsForm = this.formBuilder.group({
+      nome: [this.produto.nome, [Validators.required, Validators.minLength(5)]],
+      preco: [this.produto.preco, [Validators.required, Validators.minLength(2)]],
+      descricao: [this.produto.descricao, [Validators.required,]],
+      categoria: [this.produto.categoria, [Validators.required]],
+      fornecedor: [this.produto.fornecedor, [Validators.required]],
+      imagem: [null],
+      
+    })
+  }
 
-  }
-  habilitar(){
-    if (this.edicao){
-      this.edicao = false;
-    }else{
-      this.edicao = true;
-    }
-  }
-  uploadFile(imagem: any){
-    this.imagem = imagem.files;
+  uploadFile(event: any){
+    this.imagem = event.target.files;
   }
 
   editar(){
-    if(this.nome && this.preco  ){
-      let novo : Produto = new Produto(this.nome, this.preco);
-      novo.descricao = this.descricao;
-      novo.categoria = this.categoria;
-      novo.fornecedor= this.fornecedor;
-      novo.id = this.produto.id;
+    if (this.detailsForm.valid){
+      const novo: Produto = {...this.detailsForm.value,uid: this.user.uid,
+        id: this.produto.id, downloadURL: this.produto.downloadURL};
+
       if(this.imagem){
         this.firebase.uploadImage(this.imagem, novo)
         ?.then(()=>{this.router.navigate(["/home"])})
@@ -66,7 +64,7 @@ export class EditarPage implements OnInit {
         })
       }
     }else{
-      this.presentAlert("Erro", "Nome e Preço são campos Obrigatórios!");
+      this.presentAlert("Erro", "Verifique os campos obrigatórios!");
     }
   }
   
@@ -81,6 +79,9 @@ export class EditarPage implements OnInit {
       console.log(error);
       this.presentAlert("Erro", "Erro ao Excluir Produto!");
     })
+  }
+  goBackPage(){
+    this.goBack.goBackPage();
   }
 
 

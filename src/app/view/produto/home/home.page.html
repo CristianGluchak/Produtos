@@ -8,7 +8,7 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-list *ngFor="let produto of this.componentesDoProduto">
+  <ion-list *ngFor="let produto of this.componentesDoProduto,let i =index">
   <ion-item (click)="editar(produto)">
       <ion-avatar><img src="{{produto.downloadURL}}" /></ion-avatar>
      <ion-label>{{produto.nome}}</ion-label>
